@@ -17,15 +17,15 @@ export const cart:Array<{sku:string, name:string, qty:number, price:number, potC
 // 目標：理解 Enum 定義與反向映射的寫法。
 
 export enum PlantCategory {
-  tree = "oak",
-  shrub = "hydrangea",
-  herb = "basil",
-  vine = "ivy",
-  succulent = "aloe",
-  fern = "maidenhair",
-  aquatic = "water_lily"
+  tree,
+  shrub,
+  herb,
+  vine,
+  succulent,
+  fern,
+  aquatic
 }
-export const catKeyName: string = PlantCategory["tree"];
+export const catKeyName: string = PlantCategory[0];
 
 
 // --- 題目三：type（& 組合） ---
@@ -72,7 +72,7 @@ export const fiddleLeafFig:PlantItem = {
 export type CartItem = { price: number; qty: number };
 export type Coupon = { type: "percent" | "cash"; amount: number };
 export type CalcTotalFn = {
-  (items: CartItem[], coupon:Coupon):number
+  (items: CartItem[], coupon?:Coupon):number
 }
 
 export const calcTotal:CalcTotalFn = (items, coupon) => {
@@ -96,7 +96,7 @@ export type PlantDTO = {
   category: string; 
 };
 
-export const fetchPlants = async () : Promise<AxiosResponse<PlantDTO>> /* TODO */ => {
+export const fetchPlants = async () : Promise<AxiosResponse<PlantDTO[]>> /* TODO */ => {
   return axios.get('https://fakestoreapi.com/products');
 }
 
@@ -108,7 +108,7 @@ export const fetchPlants = async () : Promise<AxiosResponse<PlantDTO>> /* TODO *
 export type PlantBase = { id: number; name: string; price: number; description?: string };
 
 export function updatePlant(input: Partial<PlantBase>): Required<PlantBase> {
-  const existing: PlantBase= { id: 1, name: "虎尾蘭", price: 480, description: "耐陰、淨化空氣" };
+  const existing: Required<PlantBase>= { id: 1, name: "虎尾蘭", price: 480, description: "耐陰、淨化空氣" };
   const merged = { ...existing, ...input };
   return {
     id: merged.id,
